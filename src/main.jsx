@@ -12,6 +12,7 @@ import Register from './components/register/Register';
 import UserDashboard from './components/UserDashboard/UserDashboard';
 import PrivateRoute from './components/privateroute/PrivateRoute';
 import AuthProvider from './components/provider/AuthProvider';
+import AddTask from './components/AddTask/AddTask';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path:"/dashboard",
         element:<PrivateRoute><UserDashboard></UserDashboard></PrivateRoute> 
+      },
+      {
+        path:"/addtask",
+        element:<PrivateRoute><AddTask></AddTask></PrivateRoute> 
       }
     ]
   },
