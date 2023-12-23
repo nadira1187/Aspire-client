@@ -1,3 +1,5 @@
+// Task.js
+import React from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 
 const Task = ({ task, onTaskDrop }) => {
@@ -9,28 +11,35 @@ const Task = ({ task, onTaskDrop }) => {
     }),
   });
 
-  const [, drop] = useDrop({
-    accept: 'TASK',
-    drop: (droppedItem) => {
-      console.log('Dropped item:', droppedItem);
-      console.log(`Dropped task with ID ${droppedItem.id} to 'ongoing'`);
-      onTaskDrop(droppedItem, 'ongoing');
-    },
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-      canDrop: monitor.canDrop(),
-    }),
-  });
-  
-  console.log(`Task with ID ${task._id} isDragging: ${isDragging}`); // Add this log statement
-  console.log(`Drop info - isOver: ${drop.isOver}, canDrop: ${drop.canDrop}`); // Add this log statement
-  
   return (
-    <div ref={(node) => drag(drop(node))} style={{ opacity: isDragging ? 0.5 : 1 }}>
+    <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
       {/* Render your task content here */}
       <p>{task.title}</p>
     </div>
   );
 };
 
-export default Task;
+const DraggableTask = ({ task, onTaskDrop }) => {
+  const [{ isOver }, drop] = useDrop({
+    accept: 'TASK',
+    drop: (item) => onTaskDrop(item.id),
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  });
+
+  const dropStyle = {
+    background: isOver ? 'lightgreen' : 'white',
+    padding: '8px',
+    border: '1px solid #ddd',
+    cursor: 'move',
+  };
+
+  return (
+    <div ref={drop} style={dropStyle}>
+      <Task task={task} onTaskDrop={onTaskDrop} />
+    </div>
+  );
+};
+
+export default DraggableTask;
